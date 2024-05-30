@@ -3,9 +3,11 @@ package com.example;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.shape.*;
 import javafx.scene.image.*;
 import javafx.stage.Stage;
@@ -15,6 +17,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class Main extends Application {
+    Scene loginScene;
+    Scene mainScene;
     Line line;
     Button button;
     Stage window;
@@ -25,57 +29,32 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         window = primaryStage;
+        // set title for the stage
+        window.setTitle("Brooklyn Tech");
 
-        /*
-         * Label label = new Label("First Floor");
-         * Button button1 = new Button("Second Floor");
-         * Button button2 = new Button("Third Floor");
-         * button1.setOnAction(e -> window.setScene(scene2));
-         * 
-         * HBox topMenu = new HBox();
-         * topMenu.getChildren().addAll(label, button1, button2);
-         */
+        VBox loginLayout = logIn();
 
+        // Create the login scene
+        loginScene = new Scene(loginLayout, 300, 200);
+
+        // Create the main screen layout
+        VBox mainLayout = primaryBox();
+
+        // Create the header
         HBox topMenu = addButtons();
 
-        Image image = new Image(new FileInputStream("techFloorPlan.png"));
-        ImageView imageView = new ImageView(image);
-        imageView.setX(50);
-        imageView.setY(25);
-        imageView.setFitHeight(500);
-        imageView.setFitWidth(500);
-        // Setting the preserve ratio of the image view
-        imageView.setPreserveRatio(true);
-
-        StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(imageView);
-
+        // Create BorderPane and add things into it
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(topMenu);
-        borderPane.setCenter(stackPane);
+        borderPane.setCenter(mainLayout);
 
-        scene1 = new Scene(borderPane, 500, 500);
+        // Create the main scene
+        mainScene = new Scene(borderPane, 300, 200);
 
-        /*
-         * StackPane layout1 = new StackPane();
-         * layout1.getChildren().addAll(label, button1, imageView);
-         * scene1 = new Scene(layout1, 300, 300);
-         */
-
-        // button 2
-        Button button10 = new Button("Back to home page");
-        button10.setOnAction(e -> window.setScene(scene1));
-
-        // Layout 2
-        StackPane layout2 = new StackPane();
-        layout2.getChildren().add(button10);
-        scene2 = new Scene(layout2, 300, 300);
-
-        // Display homepage first
-        window.setScene(scene1);
-        window.setTitle("School Map");
+        // Set the initial scene to the login scene
+        window.setScene(loginScene);
         window.show();
     }
 
@@ -85,31 +64,6 @@ public class Main extends Application {
         topMenu.setPadding(new Insets(15, 12, 15, 12));
         topMenu.setSpacing(10);
         topMenu.setStyle("-fx-background-color: #336699;");
-
-        /*
-         * Creating the buttons one by one
-         * Button floorb = new Button("Basement");
-         * Button floor1 = new Button("Floor 1");
-         * Button floor3 = new Button("Floor 2");
-         * Button floor2 = new Button("Floor 3");
-         * Button floor4 = new Button("Floor 4");
-         * Button floor5 = new Button("Floor 5");
-         * Button floor6 = new Button("Floor 6");
-         * Button floor7 = new Button("Floor 7");
-         * Button floor8 = new Button("Floor 8");
-         * 
-         * floorb.setPrefSize(100, 20);
-         * 
-         * floorb.setOnAction(e -> window.setScene(sceneb));
-         * floor1.setOnAction(e -> window.setScene(scene1));
-         * floor2.setOnAction(e -> window.setScene(scene2));
-         * floor3.setOnAction(e -> window.setScene(scene3));
-         * floor4.setOnAction(e -> window.setScene(scene4));
-         * floor5.setOnAction(e -> window.setScene(scene5));
-         * floor6.setOnAction(e -> window.setScene(scene6));
-         * floor7.setOnAction(e -> window.setScene(scene7));
-         * floor8.setOnAction(e -> window.setScene(scene8));
-         */
 
         // Creating a dropdown menu for the floors
         MenuButton floors = new MenuButton("Floors");
@@ -136,5 +90,72 @@ public class Main extends Application {
         topMenu.getChildren().addAll(label, floors);
 
         return topMenu;
+    }
+
+    public VBox logIn() {
+        // TextField for username
+        TextField usernameField = new TextField();
+        Label usernameLabel = new Label("Username:");
+        usernameLabel.setLabelFor(usernameField);
+
+        // PasswordField for password
+        PasswordField passwordField = new PasswordField();
+        Label passwordLabel = new Label("Password:");
+        passwordLabel.setLabelFor(passwordField);
+
+        // VBox layout for login screen
+        VBox loginLayout = new VBox(10);
+        loginLayout.setAlignment(Pos.CENTER);
+        loginLayout.getChildren().addAll(usernameLabel, usernameField, passwordLabel, passwordField);
+
+        // Event handler for login action
+        EventHandler<ActionEvent> loginEvent = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                // Display a confirmation dialog with Yes and Cancel options
+                Alert alert = new Alert(AlertType.CONFIRMATION, "Log In", ButtonType.YES, ButtonType.CANCEL);
+                alert.setTitle("Brooklyn Tech");
+                alert.setHeaderText(null);
+                alert.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.YES) {
+                        // Switch to the main screen
+                        window.setScene(mainScene);
+                        window.setTitle("Brooklyn Tech");
+                    } else {
+                        // Show a message indicating the operation is canceled
+                        Alert cancelAlert = new Alert(AlertType.INFORMATION, "Log in canceled");
+                        cancelAlert.setHeaderText(null);
+                        cancelAlert.showAndWait();
+                    }
+                });
+            }
+        };
+
+        // When enter is pressed
+        passwordField.setOnAction(loginEvent);
+
+        return loginLayout;
+    }
+
+    public VBox primaryBox() {
+        // Create the main screen layout
+        VBox mainLayout = new VBox(10);
+        mainLayout.setAlignment(Pos.CENTER);
+        Label mainLabel = new Label("Welcome to the main screen!");
+
+        mainLayout.getChildren().add(mainLabel);
+        return mainLayout;
+    }
+
+    public ImageView addImage(Image img) {
+        ImageView imageView = new ImageView(img);
+        imageView.setX(50);
+        imageView.setY(25);
+        imageView.setFitHeight(500);
+        imageView.setFitWidth(500);
+        // Setting the preserve ratio of the image view
+        imageView.setPreserveRatio(true);
+
+        return imageView;
     }
 }
