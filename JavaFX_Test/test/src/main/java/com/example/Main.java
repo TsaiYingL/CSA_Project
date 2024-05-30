@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import javafx.event.*;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main extends Application {
@@ -29,7 +30,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws FileNotFoundException {
         window = primaryStage;
         // set title for the stage
         window.setTitle("Brooklyn Tech");
@@ -51,13 +52,27 @@ public class Main extends Application {
         borderPane.setCenter(mainLayout);
 
         // Create the main scene
-        mainScene = new Scene(borderPane, 300, 200);
+        mainScene = new Scene(borderPane, 500, 500);
 
         // Set the initial scene to the login scene
         window.setScene(loginScene);
         window.show();
     }
 
+    @SuppressWarnings("exports")
+    public ImageView addImage(Image img) {
+        ImageView imageView = new ImageView(img);
+        imageView.setX(50);
+        imageView.setY(25);
+        imageView.setFitHeight(500);
+        imageView.setFitWidth(500);
+        // Setting the preserve ratio of the image view
+        imageView.setPreserveRatio(true);
+
+        return imageView;
+    }
+
+    @SuppressWarnings("exports")
     public HBox addButtons() {
         HBox topMenu = new HBox();
         Label label = new Label("Home");
@@ -92,6 +107,7 @@ public class Main extends Application {
         return topMenu;
     }
 
+    @SuppressWarnings("exports")
     public VBox logIn() {
         // TextField for username
         TextField usernameField = new TextField();
@@ -137,25 +153,17 @@ public class Main extends Application {
         return loginLayout;
     }
 
-    public VBox primaryBox() {
+    @SuppressWarnings("exports")
+    public VBox primaryBox() throws FileNotFoundException {
         // Create the main screen layout
         VBox mainLayout = new VBox(10);
         mainLayout.setAlignment(Pos.CENTER);
         Label mainLabel = new Label("Welcome to the main screen!");
 
-        mainLayout.getChildren().add(mainLabel);
+        Image image = new Image(new FileInputStream("techFloorPlan.png"));
+        ImageView imageView = addImage(image);
+
+        mainLayout.getChildren().addAll(mainLabel, imageView);
         return mainLayout;
-    }
-
-    public ImageView addImage(Image img) {
-        ImageView imageView = new ImageView(img);
-        imageView.setX(50);
-        imageView.setY(25);
-        imageView.setFitHeight(500);
-        imageView.setFitWidth(500);
-        // Setting the preserve ratio of the image view
-        imageView.setPreserveRatio(true);
-
-        return imageView;
     }
 }
