@@ -1,26 +1,43 @@
 package com.example;
 
 public class Room {
+    private double x;
+    private double y;
     private int peopleNum;
     private int maxNum;
     private int lineNum;
     private boolean isOpen;
 
-    public Room(int max) {
+    public Room(double x, double y, int max) {
+        this.x = x;
+        this.y = y;
         peopleNum = 0;
         maxNum = max;
     }
 
-    public Room(int num, int max) {
+    public Room(double x, double y, int num, int max) {
+        this.x = x;
+        this.y = y;
+        isOpen = true;
         peopleNum = num;
         maxNum = max;
     }
 
-    public Room(int num, int line, int max) {
+    public Room(double x, double y, int num, int line, int max) {
+        this.x = x;
+        this.y = y;
         peopleNum = num;
         maxNum = max;
         lineNum = line;
         isOpen = false;
+    }
+
+    public double xVal() {
+        return x;
+    }
+
+    public double yVal() {
+        return y;
     }
 
     public int getNum() {

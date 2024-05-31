@@ -24,8 +24,13 @@ public class App extends Application {
     Stage window;
     Scene loginScene, sceneb, scene1, scene2, scene3, scene4, scene5, scene6, scene7, scene8;
 
+    Room eleA = new Room(480, 645, 20);
+    Room eleB = new Room(480, 630, 5, 20);
+    Room[] elevators = { eleA, eleB };
+
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
+        System.out.println("ijelijlwjf" + eleA.xVal() + " " + eleA.yVal());
         window = primaryStage;
         // set title for the stage
         window.setTitle("Brooklyn Tech");
@@ -58,17 +63,6 @@ public class App extends Application {
         imageView.setPreserveRatio(true);
 
         return imageView;
-    }
-
-    public double[] mousePos(Scene scene) {
-        scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent event) {
-                double x = event.getX();
-                double y = event.getY();
-
-                System.out.println(x + " " + y);
-            }
-        });
     }
 
     @SuppressWarnings("exports")
@@ -106,7 +100,9 @@ public class App extends Application {
     }
 
     @SuppressWarnings("exports")
-    public void elevators(Scene scene, Room elevator, double x, double y, boolean restriction) {
+    public void elevators(Scene scene, Room[] ele) {
+        Room[] elevator = ele;
+
         scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
             double mouseX, mouseY;
 
@@ -115,11 +111,13 @@ public class App extends Application {
                 mouseY = event.getY();
 
                 System.out.println(mouseX + " " + mouseY);
-
-                if ((Math.abs(mouseX - x - 10) <= 10) && (Math.abs(mouseY - y - 10) <= 10)) {
-                    System.out.println(elevator.check());
-                } else {
-                    System.out.println("no elevator");
+                for (Room i : elevator) {
+                    System.out.println(i.xVal() + " " + i.yVal());
+                    if ((Math.abs(mouseX - i.xVal() - 5) <= 10) && (Math.abs(mouseY - i.yVal() - 10) <= 10)) {
+                        System.out.println(i.check());
+                    } else {
+                        System.out.println("no elevator");
+                    }
                 }
             }
         });
@@ -145,9 +143,6 @@ public class App extends Application {
         Image image = new Image(new FileInputStream(imgpath));
         ImageView imageView = addImage(image);
 
-        // adding rooms
-        Room eleA = new Room(20);
-
         vbox.getChildren().addAll(label, imageView);
         stackPane.getChildren().addAll(vbox);
 
@@ -156,8 +151,10 @@ public class App extends Application {
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(hbox);
         borderPane.setCenter(stackPane);
+
         scenes[floor] = new Scene(borderPane, 700, 800);
-        elevators(scenes[floor], eleA, 480, 645, false);
+        elevators(scenes[floor], elevators);
+
         return scenes[floor];
     }
 
