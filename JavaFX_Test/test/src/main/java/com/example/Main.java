@@ -55,10 +55,8 @@ public class Main extends Application {
     @SuppressWarnings("exports")
     public ImageView addImage(Image img) {
         ImageView imageView = new ImageView(img);
-        imageView.setX(50);
-        imageView.setY(25);
-        imageView.setFitHeight(500);
-        imageView.setFitWidth(500);
+        imageView.setFitHeight(700);
+        imageView.setFitWidth(700);
         // Setting the preserve ratio of the image view
         imageView.setPreserveRatio(true);
 
@@ -99,27 +97,51 @@ public class Main extends Application {
         return topMenu;
     }
 
+    @SuppressWarnings("exports")
+    public Button elevators(Room elevator, boolean restriction) {
+        Button button = new Button();
+        button.setStyle("-fx-background-color: darkblue;");
+        button.setPrefWidth(5);
+        button.setPrefHeight(5);
+        // button.setVisible(false);
+        button.setOnAction(e -> System.out.println(elevator.check()));
+        return button;
+    }
+
     public Scene createScenes(int floor, String imgpath) throws FileNotFoundException {
         Scene[] scenes = { sceneb, scene1, scene2, scene3, scene4, scene5, scene6, scene7, scene8 };
 
+        StackPane stackPane = new StackPane();
+
         VBox vbox = new VBox(10);
         vbox.setAlignment(Pos.TOP_CENTER);
+
+        // labeling the scene
         Label label;
         if (floor == 0) {
             label = new Label("Basement");
         } else {
             label = new Label("Floor " + String.valueOf(floor));
         }
+
+        // importing the floor map
         Image image = new Image(new FileInputStream(imgpath));
         ImageView imageView = addImage(image);
+
+        // adding rooms
+        Room eleA = new Room(20);
+        Button elevatorA = elevators(eleA, false);
+
         vbox.getChildren().addAll(label, imageView);
+        stackPane.getChildren().addAll(vbox, elevatorA);
+        StackPane.setMargin(elevatorA, new Insets(0, 0, -340, 210));
 
         HBox hbox = addButtons();
 
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(hbox);
-        borderPane.setCenter(vbox);
-        scenes[floor] = new Scene(borderPane, 500, 600);
+        borderPane.setCenter(stackPane);
+        scenes[floor] = new Scene(borderPane, 700, 800);
         return scenes[floor];
     }
 
