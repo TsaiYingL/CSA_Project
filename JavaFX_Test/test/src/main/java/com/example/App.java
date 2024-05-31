@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.shape.*;
 import javafx.scene.image.*;
+import javafx.scene.input.*;
 import javafx.stage.Stage;
 import javafx.event.*;
 
@@ -59,6 +60,17 @@ public class App extends Application {
         return imageView;
     }
 
+    public double[] mousePos(Scene scene) {
+        scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                double x = event.getX();
+                double y = event.getY();
+
+                System.out.println(x + " " + y);
+            }
+        });
+    }
+
     @SuppressWarnings("exports")
     public HBox addButtons() {
         HBox topMenu = new HBox();
@@ -94,14 +106,23 @@ public class App extends Application {
     }
 
     @SuppressWarnings("exports")
-    public Button elevators(Room elevator, boolean restriction) {
-        Button button = new Button();
-        button.setStyle("-fx-background-color: darkblue;");
-        button.setPrefWidth(5);
-        button.setPrefHeight(5);
-        // button.setVisible(false);
-        button.setOnAction(e -> System.out.println(elevator.check()));
-        return button;
+    public void elevators(Scene scene, Room elevator, double x, double y, boolean restriction) {
+        scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            double mouseX, mouseY;
+
+            public void handle(MouseEvent event) {
+                mouseX = event.getX();
+                mouseY = event.getY();
+
+                System.out.println(mouseX + " " + mouseY);
+
+                if ((Math.abs(mouseX - x - 10) <= 10) && (Math.abs(mouseY - y - 10) <= 10)) {
+                    System.out.println(elevator.check());
+                } else {
+                    System.out.println("no elevator");
+                }
+            }
+        });
     }
 
     public Scene createScenes(int floor, String imgpath) throws FileNotFoundException {
@@ -126,11 +147,9 @@ public class App extends Application {
 
         // adding rooms
         Room eleA = new Room(20);
-        Button elevatorA = elevators(eleA, false);
 
         vbox.getChildren().addAll(label, imageView);
-        stackPane.getChildren().addAll(vbox, elevatorA);
-        StackPane.setMargin(elevatorA, new Insets(0, 0, -340, 210));
+        stackPane.getChildren().addAll(vbox);
 
         HBox hbox = addButtons();
 
@@ -138,6 +157,7 @@ public class App extends Application {
         borderPane.setTop(hbox);
         borderPane.setCenter(stackPane);
         scenes[floor] = new Scene(borderPane, 700, 800);
+        elevators(scenes[floor], eleA, 480, 645, false);
         return scenes[floor];
     }
 
