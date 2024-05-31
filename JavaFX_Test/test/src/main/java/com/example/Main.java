@@ -18,12 +18,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main extends Application {
-    Scene loginScene;
-    Scene mainScene;
     Line line;
     Button button;
     Stage window;
-    Scene sceneb, scene1, scene2, scene3, scene4, scene5, scene6, scene7, scene8;
+    Scene loginScene, sceneb, scene1, scene2, scene3, scene4, scene5, scene6, scene7, scene8;
 
     public static void main(String[] args) {
         launch();
@@ -35,24 +33,19 @@ public class Main extends Application {
         // set title for the stage
         window.setTitle("Brooklyn Tech");
 
+        // Create the floor scenes
+        scene1 = createScenes(1, "floorPlan\\floor.png");
+        scene2 = createScenes(2, "floorPlan\\floor.png");
+        scene3 = createScenes(3, "floorPlan\\floor.png");
+        scene4 = createScenes(4, "floorPlan\\floor.png");
+        scene5 = createScenes(5, "floorPlan\\floor5.png");
+        scene6 = createScenes(6, "floorPlan\\floor.png");
+        scene7 = createScenes(7, "floorPlan\\floor7.png");
+
         VBox loginLayout = logIn();
 
         // Create the login scene
         loginScene = new Scene(loginLayout, 300, 200);
-
-        // Create the main screen layout
-        VBox mainLayout = primaryBox();
-
-        // Create the header
-        HBox topMenu = addButtons();
-
-        // Create BorderPane and add things into it
-        BorderPane borderPane = new BorderPane();
-        borderPane.setTop(topMenu);
-        borderPane.setCenter(mainLayout);
-
-        // Create the main scene
-        mainScene = new Scene(borderPane, 500, 500);
 
         // Set the initial scene to the login scene
         window.setScene(loginScene);
@@ -75,7 +68,6 @@ public class Main extends Application {
     @SuppressWarnings("exports")
     public HBox addButtons() {
         HBox topMenu = new HBox();
-        Label label = new Label("Home");
         topMenu.setPadding(new Insets(15, 12, 15, 12));
         topMenu.setSpacing(10);
         topMenu.setStyle("-fx-background-color: #336699;");
@@ -84,8 +76,8 @@ public class Main extends Application {
         MenuButton floors = new MenuButton("Floors");
         MenuItem floorb = new MenuItem("Basement");
         MenuItem floor1 = new MenuItem("Floor 1");
-        MenuItem floor3 = new MenuItem("Floor 2");
-        MenuItem floor2 = new MenuItem("Floor 3");
+        MenuItem floor2 = new MenuItem("Floor 2");
+        MenuItem floor3 = new MenuItem("Floor 3");
         MenuItem floor4 = new MenuItem("Floor 4");
         MenuItem floor5 = new MenuItem("Floor 5");
         MenuItem floor6 = new MenuItem("Floor 6");
@@ -102,28 +94,48 @@ public class Main extends Application {
         floor6.setOnAction(e -> window.setScene(scene6));
         floor7.setOnAction(e -> window.setScene(scene7));
         floor8.setOnAction(e -> window.setScene(scene8));
-        topMenu.getChildren().addAll(label, floors);
+        topMenu.getChildren().addAll(floors);
 
         return topMenu;
     }
 
-    @SuppressWarnings("exports")
+    public Scene createScenes(int floor, String imgpath) throws FileNotFoundException {
+        Scene[] scenes = { sceneb, scene1, scene2, scene3, scene4, scene5, scene6, scene7, scene8 };
+
+        VBox vbox = new VBox(10);
+        vbox.setAlignment(Pos.TOP_CENTER);
+        Label label;
+        if (floor == 0) {
+            label = new Label("Basement");
+        } else {
+            label = new Label("Floor " + String.valueOf(floor));
+        }
+        Image image = new Image(new FileInputStream(imgpath));
+        ImageView imageView = addImage(image);
+        vbox.getChildren().addAll(label, imageView);
+
+        HBox hbox = addButtons();
+
+        BorderPane borderPane = new BorderPane();
+        borderPane.setTop(hbox);
+        borderPane.setCenter(vbox);
+        scenes[floor] = new Scene(borderPane, 500, 600);
+        return scenes[floor];
+    }
+
     public VBox logIn() {
         // TextField for username
         TextField usernameField = new TextField();
         Label usernameLabel = new Label("Username:");
         usernameLabel.setLabelFor(usernameField);
-
         // PasswordField for password
         PasswordField passwordField = new PasswordField();
         Label passwordLabel = new Label("Password:");
         passwordLabel.setLabelFor(passwordField);
-
         // VBox layout for login screen
         VBox loginLayout = new VBox(10);
         loginLayout.setAlignment(Pos.CENTER);
         loginLayout.getChildren().addAll(usernameLabel, usernameField, passwordLabel, passwordField);
-
         // Event handler for login action
         EventHandler<ActionEvent> loginEvent = new EventHandler<ActionEvent>() {
             @Override
@@ -135,7 +147,7 @@ public class Main extends Application {
                 alert.showAndWait().ifPresent(response -> {
                     if (response == ButtonType.YES) {
                         // Switch to the main screen
-                        window.setScene(mainScene);
+                        window.setScene(scene1);
                         window.setTitle("Brooklyn Tech");
                     } else {
                         // Show a message indicating the operation is canceled
@@ -146,24 +158,8 @@ public class Main extends Application {
                 });
             }
         };
-
         // When enter is pressed
         passwordField.setOnAction(loginEvent);
-
         return loginLayout;
-    }
-
-    @SuppressWarnings("exports")
-    public VBox primaryBox() throws FileNotFoundException {
-        // Create the main screen layout
-        VBox mainLayout = new VBox(10);
-        mainLayout.setAlignment(Pos.CENTER);
-        Label mainLabel = new Label("Welcome to the main screen!");
-
-        Image image = new Image(new FileInputStream("techFloorPlan.png"));
-        ImageView imageView = addImage(image);
-
-        mainLayout.getChildren().addAll(mainLabel, imageView);
-        return mainLayout;
     }
 }
