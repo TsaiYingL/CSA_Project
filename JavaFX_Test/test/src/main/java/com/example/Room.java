@@ -77,7 +77,6 @@ public class Room {
             } else {
                 peopleNum += num;
             }
-            System.out.println(check());
         } else {
             System.out.println("You can't add negative people");
         }
@@ -95,7 +94,6 @@ public class Room {
             } else {
                 peopleNum -= num;
             }
-            System.out.println(check());
         } else {
             System.out.println("You can't subtract negative people");
         }
@@ -120,17 +118,21 @@ public class Room {
             lineNum = 0;
             peopleNum = sum;
         }
-        System.out.println(check());
     }
 
-    public String check() {
-        String status;
-        if (isOpen == true) {
-            status = "open";
+    public String check(double x, double y, double xRange, double yRange) {
+        // System.out.println(i.xVal() + " " + i.yVal());
+        if ((Math.abs(x - xVal() - xRange / 2) <= xRange / 2) && (Math.abs(y - yVal() - yRange / 2) <= yRange / 2)) {
+            String status;
+            if (isOpen == true) {
+                status = "open";
+            } else {
+                status = "closed";
+            }
+            return ("The room is " + status + ". There are " + peopleNum + " people in the room and " + lineNum
+                    + " people on line");
         } else {
-            status = "closed";
+            return ("No room");
         }
-        return ("The room is " + status + ". There are " + peopleNum + " people in the room and " + lineNum
-                + " people on line");
     }
 }

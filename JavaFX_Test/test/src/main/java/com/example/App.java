@@ -24,13 +24,15 @@ public class App extends Application {
     Stage window;
     Scene loginScene, sceneb, scene1, scene2, scene3, scene4, scene5, scene6, scene7, scene8;
 
-    Room eleA = new Room(480, 645, 20);
-    Room eleB = new Room(480, 630, 5, 20);
-    Room[] elevators = { eleA, eleB };
+    Room eleA = new Room(480, 646, 20);
+    Room eleB = new Room(480, 628, 5, 20);
+    Room eleC = new Room(480, 459, 1, 20);
+    Room eleD = new Room(480, 247, 10, 20);
+    Room eleE = new Room(480, 227, 20);
+    Room[] elevators = { eleA, eleB, eleC, eleD, eleE };
 
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
-        System.out.println("ijelijlwjf" + eleA.xVal() + " " + eleA.yVal());
         window = primaryStage;
         // set title for the stage
         window.setTitle("Brooklyn Tech");
@@ -100,24 +102,18 @@ public class App extends Application {
     }
 
     @SuppressWarnings("exports")
-    public void elevators(Scene scene, Room[] ele) {
-        Room[] elevator = ele;
+    public void elevators(Scene scene, Room[] rooms) {
 
         scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            double mouseX, mouseY;
 
             public void handle(MouseEvent event) {
-                mouseX = event.getX();
-                mouseY = event.getY();
+                double mouseX = event.getX();
+                double mouseY = event.getY();
 
-                System.out.println(mouseX + " " + mouseY);
-                for (Room i : elevator) {
-                    System.out.println(i.xVal() + " " + i.yVal());
-                    if ((Math.abs(mouseX - i.xVal() - 5) <= 10) && (Math.abs(mouseY - i.yVal() - 10) <= 10)) {
-                        System.out.println(i.check());
-                    } else {
-                        System.out.println("no elevator");
-                    }
+                System.out.println("mouese: " + mouseX + " " + mouseY);
+                // System.out.println("dfsdf");
+                for (Room r : rooms) {
+                    System.out.println(r.check(mouseX, mouseY, 26, 18));
                 }
             }
         });
