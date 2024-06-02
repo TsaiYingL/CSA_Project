@@ -30,7 +30,7 @@ public class App extends Application {
     Room eleC = new Room(480, 459, 1, 20);
     Room eleD = new Room(480, 247, 10, 20);
     Room eleE = new Room(480, 227, 20);
-    Room[] elevators = { eleA, eleB, eleC, eleD, eleE };
+    RoomType elevator = new RoomType(new Room[] { eleA, eleB, eleC, eleD, eleE }, 26, 18);
 
     // creating the bathrooms
 
@@ -104,24 +104,6 @@ public class App extends Application {
         return topMenu;
     }
 
-    @SuppressWarnings("exports")
-    public void roomStat(Scene scene, Room[] rooms, double xRange, double yRange) {
-
-        scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-            public void handle(MouseEvent event) {
-                double mouseX = event.getX();
-                double mouseY = event.getY();
-
-                System.out.println("mouese: " + mouseX + " " + mouseY);
-                // System.out.println("dfsdf");
-                for (Room r : rooms) {
-                    System.out.println(r.check(mouseX, mouseY, xRange, yRange));
-                }
-            }
-        });
-    }
-
     public Scene createScenes(int floor, String imgpath) throws FileNotFoundException {
         Scene[] scenes = { sceneb, scene1, scene2, scene3, scene4, scene5, scene6, scene7, scene8 };
 
@@ -152,7 +134,7 @@ public class App extends Application {
         borderPane.setCenter(stackPane);
 
         scenes[floor] = new Scene(borderPane, 700, 800);
-        roomStat(scenes[floor], elevators, 26, 18);
+        elevator.roomStat(scenes[floor]);
 
         return scenes[floor];
     }
