@@ -80,6 +80,7 @@ public class Room {
         } else {
             System.out.println("You can't add negative people");
         }
+        System.out.println(check());
     }
 
     public void removeNum(int num) {
@@ -97,16 +98,19 @@ public class Room {
         } else {
             System.out.println("You can't subtract negative people");
         }
+        System.out.println(check());
     }
 
     public void addMax(int num) {
         maxNum += num;
         reset();
+        System.out.println(check());
     }
 
     public void subtractMax(int num) {
         maxNum -= num;
         reset();
+        System.out.println(check());
     }
 
     public void reset() {
@@ -118,6 +122,18 @@ public class Room {
             lineNum = 0;
             peopleNum = sum;
         }
+        System.out.println(check());
+    }
+
+    public String check() {
+        String status;
+        if (isOpen == true) {
+            status = "open";
+        } else {
+            status = "closed";
+        }
+        return ("The room is " + status + ". There are " + peopleNum + " people in the room and " + lineNum
+                + " people on line");
     }
 
     public String check(double x, double y, double xRange, double yRange) {

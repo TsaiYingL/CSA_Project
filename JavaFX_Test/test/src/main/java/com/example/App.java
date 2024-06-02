@@ -24,12 +24,15 @@ public class App extends Application {
     Stage window;
     Scene loginScene, sceneb, scene1, scene2, scene3, scene4, scene5, scene6, scene7, scene8;
 
+    // creating the elevators
     Room eleA = new Room(480, 646, 20);
     Room eleB = new Room(480, 628, 5, 20);
     Room eleC = new Room(480, 459, 1, 20);
     Room eleD = new Room(480, 247, 10, 20);
     Room eleE = new Room(480, 227, 20);
     Room[] elevators = { eleA, eleB, eleC, eleD, eleE };
+
+    // creating the bathrooms
 
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
@@ -102,7 +105,7 @@ public class App extends Application {
     }
 
     @SuppressWarnings("exports")
-    public void elevators(Scene scene, Room[] rooms) {
+    public void roomStat(Scene scene, Room[] rooms, double xRange, double yRange) {
 
         scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -113,7 +116,7 @@ public class App extends Application {
                 System.out.println("mouese: " + mouseX + " " + mouseY);
                 // System.out.println("dfsdf");
                 for (Room r : rooms) {
-                    System.out.println(r.check(mouseX, mouseY, 26, 18));
+                    System.out.println(r.check(mouseX, mouseY, xRange, yRange));
                 }
             }
         });
@@ -149,7 +152,7 @@ public class App extends Application {
         borderPane.setCenter(stackPane);
 
         scenes[floor] = new Scene(borderPane, 700, 800);
-        elevators(scenes[floor], elevators);
+        roomStat(scenes[floor], elevators, 26, 18);
 
         return scenes[floor];
     }
