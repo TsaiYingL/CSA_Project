@@ -30,9 +30,17 @@ public class App extends Application {
     Room eleC = new Room(480, 459, 1, 20);
     Room eleD = new Room(480, 247, 10, 20);
     Room eleE = new Room(480, 227, 20);
-    RoomType elevator = new RoomType(new Room[] { eleA, eleB, eleC, eleD, eleE }, 26, 18);
+    RoomType elevator = new RoomType(new Room[] { eleA, eleB, eleC, eleD, eleE }, 5, 26, 18);
 
     // creating the bathrooms
+    Room gwc1 = new Room(537, 208, 1, 6);
+    Room gwc2 = new Room(537, 208, 2, 6);
+    Room gwc3 = new Room(537, 208, 3, 6);
+    Room gwc4 = new Room(537, 208, 4, 6);
+    Room gwc5 = new Room(537, 208, 5, 6);
+    Room gwc6 = new Room(537, 208, 6, 6);
+    Room gwc7 = new Room(527, 200, 3, 6);
+    RoomType girlWC = new RoomType(new Room[] { gwc1, gwc2, gwc3, gwc4, gwc5, gwc6, gwc7 }, 1, 22, 12);
 
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
@@ -60,10 +68,10 @@ public class App extends Application {
     }
 
     @SuppressWarnings("exports")
-    public ImageView addImage(Image img) {
+    public ImageView addImage(Image img, int height, int width) {
         ImageView imageView = new ImageView(img);
-        imageView.setFitHeight(700);
-        imageView.setFitWidth(700);
+        imageView.setFitHeight(height);
+        imageView.setFitWidth(width);
         // Setting the preserve ratio of the image view
         imageView.setPreserveRatio(true);
 
@@ -71,7 +79,7 @@ public class App extends Application {
     }
 
     @SuppressWarnings("exports")
-    public HBox addButtons() {
+    public HBox addMenuButtonBox() {
         HBox topMenu = new HBox();
         topMenu.setPadding(new Insets(15, 12, 15, 12));
         topMenu.setSpacing(10);
@@ -122,19 +130,21 @@ public class App extends Application {
 
         // importing the floor map
         Image image = new Image(new FileInputStream(imgpath));
-        ImageView imageView = addImage(image);
+        ImageView imageView = addImage(image, 700, 700);
 
         vbox.getChildren().addAll(label, imageView);
         stackPane.getChildren().addAll(vbox);
 
-        HBox hbox = addButtons();
+        HBox hbox = addMenuButtonBox();
 
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(hbox);
         borderPane.setCenter(stackPane);
 
         scenes[floor] = new Scene(borderPane, 700, 800);
-        elevator.roomStat(scenes[floor]);
+        // girlWC.roomStat(scenes[floor], floor - 1);
+        // elevator.roomStat(scenes[floor]);
+        RoomType.allRoomStat(scenes[floor], floor, girlWC, elevator);
 
         return scenes[floor];
     }
