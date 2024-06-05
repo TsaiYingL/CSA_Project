@@ -89,6 +89,7 @@ public class RoomType {
             public void handle(MouseEvent event) {
                 double mouseX = event.getX();
                 double mouseY = event.getY();
+                System.out.println(mouseX + " " + mouseY);
 
                 for (RoomType t : roomTypes) {
                     if (t.getNum() > 1) {

@@ -22,7 +22,7 @@ public class App extends Application {
     Line line;
     Button button;
     Stage window;
-    Scene loginScene, sceneb, scene1, scene2, scene3, scene4, scene5, scene6, scene7, scene8;
+    Scene loginScene, sceneb, scene1, scene2, scene3, scene4, scene5, scene6, scene7, scene8, editScene;
 
     // creating the elevators
     Room eleA = new Room(480, 646, 20);
@@ -32,7 +32,7 @@ public class App extends Application {
     Room eleE = new Room(480, 227, 20);
     RoomType elevator = new RoomType(new Room[] { eleA, eleB, eleC, eleD, eleE }, 5, 26, 18);
 
-    // creating the bathrooms
+    // creating girls bathrooms
     Room gwc1 = new Room(537, 208, 1, 6);
     Room gwc2 = new Room(537, 208, 2, 6);
     Room gwc3 = new Room(537, 208, 3, 6);
@@ -41,6 +41,16 @@ public class App extends Application {
     Room gwc6 = new Room(537, 208, 6, 6);
     Room gwc7 = new Room(527, 200, 3, 6);
     RoomType girlWC = new RoomType(new Room[] { gwc1, gwc2, gwc3, gwc4, gwc5, gwc6, gwc7 }, 1, 22, 12);
+
+    // creating boys bathrooms
+    Room bwc1 = new Room(204.8, 637.6, 1, 6);
+    Room bwc2 = new Room(204.8, 637.6, 1, 6);
+    Room bwc3 = new Room(204.8, 637.6, 1, 6);
+    Room bwc4 = new Room(204.8, 637.6, 1, 6);
+    Room bwc5 = new Room(204.8, 637.6, 1, 6);
+    Room bwc6 = new Room(204.8, 637.6, 1, 6);
+    Room bwc7 = new Room(204.8, 637.6, 1, 6);
+    RoomType boyWC = new RoomType(new Room[] { bwc1, bwc2, bwc3, bwc4, bwc5, bwc6, bwc7 }, 1, 22, 12);
 
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
@@ -67,49 +77,66 @@ public class App extends Application {
         window.show();
     }
 
-    @SuppressWarnings("exports")
-    public ImageView addImage(Image img, int height, int width) {
-        ImageView imageView = new ImageView(img);
-        imageView.setFitHeight(height);
-        imageView.setFitWidth(width);
-        // Setting the preserve ratio of the image view
-        imageView.setPreserveRatio(true);
+    public VBox logIn() {
+        // TextField for username
+        TextField usernameField = new TextField();
+        Label usernameLabel = new Label("Username:");
+        usernameLabel.setLabelFor(usernameField);
+        // PasswordField for password
+        PasswordField passwordField = new PasswordField();
+        Label passwordLabel = new Label("Password:");
+        passwordLabel.setLabelFor(passwordField);
 
-        return imageView;
-    }
+        // VBox layout for login screen
+        VBox loginLayout = new VBox(10);
+        loginLayout.setAlignment(Pos.CENTER);
+        loginLayout.getChildren().addAll(usernameLabel, usernameField, passwordLabel, passwordField);
 
-    @SuppressWarnings("exports")
-    public HBox addMenuButtonBox() {
-        HBox topMenu = new HBox();
-        topMenu.setPadding(new Insets(15, 12, 15, 12));
-        topMenu.setSpacing(10);
-        topMenu.setStyle("-fx-background-color: #336699;");
+        // Event handler for login action
+        EventHandler<ActionEvent> loginEvent = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                // Display a confirmation dialog with Yes and Cancel options
+                Alert alert = new Alert(AlertType.CONFIRMATION, "Log In", ButtonType.YES, ButtonType.CANCEL,
+                        ButtonType.APPLY);
+                alert.setTitle("Brooklyn Tech");
+                alert.setHeaderText(null);
+                alert.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.YES) {
+                        // Switch to the main screen
+                        window.setScene(scene1);
+                        window.setTitle("Brooklyn Tech");
+                    } else if (response == ButtonType.APPLY) {
+                        window.setScene(editScene);
+                        window.setTitle("Edit status");
+                    } else {
+                        // Show a message indicating the operation is canceled
+                        Alert cancelAlert = new Alert(AlertType.INFORMATION, "Log in canceled");
+                        cancelAlert.setHeaderText(null);
+                        cancelAlert.showAndWait();
+                    }
+                });
+            }
+        };
 
-        // Creating a dropdown menu for the floors
-        MenuButton floors = new MenuButton("Floors");
-        MenuItem floorb = new MenuItem("Basement");
-        MenuItem floor1 = new MenuItem("Floor 1");
-        MenuItem floor2 = new MenuItem("Floor 2");
-        MenuItem floor3 = new MenuItem("Floor 3");
-        MenuItem floor4 = new MenuItem("Floor 4");
-        MenuItem floor5 = new MenuItem("Floor 5");
-        MenuItem floor6 = new MenuItem("Floor 6");
-        MenuItem floor7 = new MenuItem("Floor 7");
-        MenuItem floor8 = new MenuItem("Floor 8");
-        floors.getItems().addAll(floorb, floor1, floor2, floor3, floor4, floor5, floor6, floor7, floor8);
+        // action event
+        Label l = new Label("no text");
+        EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                if (!usernameField.getText().equals("246318489") || !passwordField.getText().equals("password")) {
+                    l.setText("Incorrect username or password");
+                    loginLayout.getChildren().add(l);
+                } else {
+                    passwordField.setOnAction(loginEvent);
+                }
+            }
+        };
 
-        floorb.setOnAction(e -> window.setScene(sceneb));
-        floor1.setOnAction(e -> window.setScene(scene1));
-        floor2.setOnAction(e -> window.setScene(scene2));
-        floor3.setOnAction(e -> window.setScene(scene3));
-        floor4.setOnAction(e -> window.setScene(scene4));
-        floor5.setOnAction(e -> window.setScene(scene5));
-        floor6.setOnAction(e -> window.setScene(scene6));
-        floor7.setOnAction(e -> window.setScene(scene7));
-        floor8.setOnAction(e -> window.setScene(scene8));
-        topMenu.getChildren().addAll(floors);
+        // when enter is pressed
+        passwordField.setOnAction(event);
 
-        return topMenu;
+        // When enter is pressed
+        return loginLayout;
     }
 
     public Scene createScenes(int floor, String imgpath) throws FileNotFoundException {
@@ -130,12 +157,12 @@ public class App extends Application {
 
         // importing the floor map
         Image image = new Image(new FileInputStream(imgpath));
-        ImageView imageView = addImage(image, 700, 700);
+        ImageView imageView = Method.addImage(image, 700, 700);
 
         vbox.getChildren().addAll(label, imageView);
         stackPane.getChildren().addAll(vbox);
 
-        HBox hbox = addMenuButtonBox();
+        HBox hbox = Method.addMenuButtonBox(window, scenes);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(hbox);
@@ -144,48 +171,20 @@ public class App extends Application {
         scenes[floor] = new Scene(borderPane, 700, 800);
         // girlWC.roomStat(scenes[floor], floor - 1);
         // elevator.roomStat(scenes[floor]);
-        RoomType.allRoomStat(scenes[floor], floor, girlWC, elevator);
+        RoomType.allRoomStat(scenes[floor], floor, girlWC, boyWC, elevator);
 
         return scenes[floor];
     }
 
-    public VBox logIn() {
-        // TextField for username
-        TextField usernameField = new TextField();
-        Label usernameLabel = new Label("Username:");
-        usernameLabel.setLabelFor(usernameField);
-        // PasswordField for password
-        PasswordField passwordField = new PasswordField();
-        Label passwordLabel = new Label("Password:");
-        passwordLabel.setLabelFor(passwordField);
-        // VBox layout for login screen
-        VBox loginLayout = new VBox(10);
-        loginLayout.setAlignment(Pos.CENTER);
-        loginLayout.getChildren().addAll(usernameLabel, usernameField, passwordLabel, passwordField);
-        // Event handler for login action
-        EventHandler<ActionEvent> loginEvent = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                // Display a confirmation dialog with Yes and Cancel options
-                Alert alert = new Alert(AlertType.CONFIRMATION, "Log In", ButtonType.YES, ButtonType.CANCEL);
-                alert.setTitle("Brooklyn Tech");
-                alert.setHeaderText(null);
-                alert.showAndWait().ifPresent(response -> {
-                    if (response == ButtonType.YES) {
-                        // Switch to the main screen
-                        window.setScene(scene1);
-                        window.setTitle("Brooklyn Tech");
-                    } else {
-                        // Show a message indicating the operation is canceled
-                        Alert cancelAlert = new Alert(AlertType.INFORMATION, "Log in canceled");
-                        cancelAlert.setHeaderText(null);
-                        cancelAlert.showAndWait();
-                    }
-                });
-            }
-        };
-        // When enter is pressed
-        passwordField.setOnAction(loginEvent);
-        return loginLayout;
+    public VBox editStat() {
+        VBox vbox = new VBox(10);
+        Button add = new Button("+");
+        Button subtract = new Button("-");
+
+        Label label = new Label("Edit Scene");
+
+        vbox.getChildren().addAll(add, subtract, label);
+        vbox.setAlignment(Pos.CENTER);
+        return vbox;
     }
 }

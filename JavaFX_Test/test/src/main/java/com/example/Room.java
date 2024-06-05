@@ -140,7 +140,6 @@ public class Room {
     }
 
     public String check(double x, double y, double xRange, double yRange) {
-        // System.out.println(xVal() + " " + yVal());
         if ((Math.abs(x - xVal() - xRange / 2) <= xRange / 2) && (Math.abs(y - yVal() - yRange / 2) <= yRange / 2)) {
             String status;
             if (isOpen == true) {
