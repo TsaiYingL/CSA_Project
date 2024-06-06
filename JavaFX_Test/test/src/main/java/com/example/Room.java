@@ -59,7 +59,18 @@ public class Room {
         return isOpen;
     }
 
+    public String[] getStat() {
+        String roomIsOpen;
+        if (isOpen == true) {
+            roomIsOpen = "open";
+        } else {
+            roomIsOpen = "close";
+        }
+        return new String[] { roomIsOpen, String.valueOf(peopleNum), String.valueOf(lineNum) };
+    }
+
     public void close() {
+        lineNum = 0;
         peopleNum = 0;
         isOpen = false;
         System.out.println("The room is closed");
@@ -68,6 +79,14 @@ public class Room {
     public void open() {
         isOpen = true;
         System.out.println("The room is open");
+    }
+
+    public void changeStat() {
+        if (isOpen == true) {
+            close();
+        } else {
+            open();
+        }
     }
 
     public void addNum(int num) {
@@ -129,28 +148,20 @@ public class Room {
     }
 
     public String check() {
-        String status;
-        if (isOpen == true) {
-            status = "open";
-        } else {
-            status = "closed";
-        }
-        return ("The room is " + status + ". There are " + peopleNum + " people in the room and " + lineNum
+        String[] stat = getStat();
+        return ("The room is " + stat[0] + ". There are " + peopleNum + " people in the room and " + lineNum
                 + " people on line");
     }
 
-    public String check(double x, double y, double xRange, double yRange) {
+    public String[] check(double x, double y, double xRange, double yRange) {
         if ((Math.abs(x - xVal() - xRange / 2) <= xRange / 2) && (Math.abs(y - yVal() - yRange / 2) <= yRange / 2)) {
-            String status;
-            if (isOpen == true) {
-                status = "open";
-            } else {
-                status = "closed";
-            }
-            return ("The room is " + status + ". There are " + peopleNum + " people in the room and " + lineNum
-                    + " people on line");
+            String[] stat = getStat();
+            System.out.println("The room is " + stat[0] + ". There are " + peopleNum + " people in the room and "
+                    + lineNum + " people on line");
+            return stat;
         } else {
-            return ("No room");
+            System.out.println("no room");
+            return new String[] { "error", "error", "error" };
         }
     }
 }
