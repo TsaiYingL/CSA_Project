@@ -153,15 +153,11 @@ public class Room {
                 + " people on line");
     }
 
-    public String[] check(double x, double y, double xRange, double yRange) {
+    public void check(double x, double y, double xRange, double yRange) {
         if ((Math.abs(x - xVal() - xRange / 2) <= xRange / 2) && (Math.abs(y - yVal() - yRange / 2) <= yRange / 2)) {
             String[] stat = getStat();
             System.out.println("The room is " + stat[0] + ". There are " + peopleNum + " people in the room and "
                     + lineNum + " people on line");
-            return stat;
-        } else {
-            System.out.println("no room");
-            return new String[] { "error", "error", "error" };
         }
     }
 }

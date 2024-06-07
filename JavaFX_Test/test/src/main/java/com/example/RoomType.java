@@ -62,7 +62,7 @@ public class RoomType {
 
                 System.out.println("mouese: " + mouseX + " " + mouseY);
                 for (Room r : rooms) {
-                    System.out.println(r.check(mouseX, mouseY, xRange, yRange));
+                    r.check(mouseX, mouseY, xRange, yRange);
                 }
             }
         });
@@ -77,8 +77,7 @@ public class RoomType {
                 double mouseX = event.getX();
                 double mouseY = event.getY();
 
-                System.out.println("mouese: " + mouseX + " " + mouseY);
-                System.out.println(rooms[num].check(mouseX, mouseY, xRange, yRange));
+                rooms[num].check(mouseX, mouseY, xRange, yRange);
             }
         });
     }
@@ -89,15 +88,14 @@ public class RoomType {
             public void handle(MouseEvent event) {
                 double mouseX = event.getX();
                 double mouseY = event.getY();
-                System.out.println(mouseX + " " + mouseY);
 
                 for (RoomType t : roomTypes) {
                     if (t.getNum() > 1) {
                         for (Room r : t.getRooms()) {
-                            System.out.println(r.check(mouseX, mouseY, t.getxRange(), t.getyRange()));
+                            r.check(mouseX, mouseY, t.getxRange(), t.getyRange());
                         }
                     } else {
-                        System.out.println(t.getRoom(floor - 1).check(mouseX, mouseY, t.getxRange(), t.getyRange()));
+                        t.getRoom(floor - 1).check(mouseX, mouseY, t.getxRange(), t.getyRange());
                     }
                 }
             }
